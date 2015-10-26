@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Where am I? What's that there?</title>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"/>
+	<style>
+	#map {
+	position: fixed;
+	height: 100%; 
+	width: 100%;
+	}
+	</style>
+	
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+	<script src="http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=vgPuFlUjuFuRGc3dRBIP9Ky2N2RU3c6X"></script>
+	<script src="http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-geocoding.js?key=vgPuFlUjuFuRGc3dRBIP9Ky2N2RU3c6X"></script>
+</head>
+<body>
+	<div id="map">
+		
+	</div>
+	
+</body>
+	<script>
+var popup = L.popup(),
+  geocode,
+  map;
+
+var marker = L.marker();
+map = L.map('map', {
+  layers: MQ.mapLayer(),
+  center: [ 44.052069, -123.086754 ],
+  zoom: 14 })
+  .on('click', function(e) {
+  	//Curious as to what is casuing the slight delay in time for new address to load into popup
+  	marker.setLatLng(e.latlng).addTo(map);
+    marker.bindPopup(popup.setLatLng(e.latlng).openOn(this)).openPopup();
+  	geocode.reverse(e.latlng);
+});
+
+geocode = MQ.geocode().on('success', function(e) {
+  popup.setContent(geocode.describeLocation(e.result.best));
+});
+	</script>
+</html>
